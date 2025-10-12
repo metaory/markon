@@ -8,6 +8,7 @@ const HOTKEYS = [
 	['c', 'Copy to clipboard', 'copy-to-clipboard'],
 	['f', 'Save to file', 'save-to-file'],
 	['o', 'Open file', 'load-from-file'],
+	['r', 'Sync Scroll', 'sync-scroll'],
 ]
 
 // Help dialog creation

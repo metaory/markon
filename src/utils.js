@@ -129,3 +129,37 @@ export const createClickHandler = (element, handler) => createEventHandler(eleme
 export const createPointerHandler = (element, handler) => createEventHandler(element, 'pointerdown', handler)
 export const createKeyHandler = (element, handler) => createEventHandler(element, 'keydown', handler)
 
+// Scroll Syncing Utility
+let editorScroller = null;
+let previewScroller = null;
+
+let onEditorScroll = null;
+let onPreviewScroll = null;
+
+export const applySyncedScroll = (on = document.querySelector('#sync-scroll')?.getAttribute('aria-pressed') === 'true') => {
+	if (!editorScroller || !previewScroller) {
+		editorScroller = document.querySelector('#editor .cm-scroller');
+		previewScroller = document.getElementById('previewhtml');
+
+		if (!editorScroller || !previewScroller) {
+			console.warn('Cannot find editorScroller or previewScroller elements');
+			return;
+		}
+
+		function syncScroll(source, target) {
+			const scrollPercent = source.scrollTop / (source.scrollHeight - source.clientHeight);
+			target.scrollTop = (target.scrollHeight - target.clientHeight) * scrollPercent;
+		}
+
+		onEditorScroll = () => syncScroll(editorScroller, previewScroller);
+		onPreviewScroll = () => syncScroll(previewScroller, editorScroller);
+	}
+
+	if (on) {
+		editorScroller.addEventListener('scroll', onEditorScroll);
+		previewScroller.addEventListener('scroll', onPreviewScroll);
+	} else {
+		editorScroller.removeEventListener('scroll', onEditorScroll);
+		previewScroller.removeEventListener('scroll', onPreviewScroll);
+	}
+}

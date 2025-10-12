@@ -6,6 +6,7 @@ import {
 	createElement,
 	downloadText,
 	openFileText,
+	applySyncedScroll,
 } from './utils.js'
 
 // Button factory - more functional approach
@@ -120,6 +121,19 @@ const BUTTON_CONFIGS = [
 		(_btn, _showToast) => {
 			window.open('https://github.com/metaory/markon', '_blank')
 		},
+	],
+	[
+		'sync-scroll',
+		'Sync Scrolling',
+		'solar:sun-bold-duotone',
+		(btn, showToast) => {
+		const pressed = btn.getAttribute('aria-pressed') === 'true'
+			btn.setAttribute('aria-pressed', !pressed)
+			applySyncedScroll(!pressed)
+			showToast(pressed ? 'Scroll Sync off' : 'Scroll Sync on')
+		},
+		true,
+		false,
 	],
 ]
 
